@@ -10,5 +10,8 @@
     
     <string name="filler">Event data will appear when available</string>
     <string name="notes_filler">EM Notes will go here when available</string>
-
+    
+    <string name="enable_notifications">Enable Notifications</string>
+	<string name="disable_notifications">Disable Notifications</string>
+	
 </resources>

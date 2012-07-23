@@ -2,6 +2,7 @@ package com.bts.fw;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +24,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
@@ -37,6 +41,7 @@ import android.widget.TextView;
  */
 public class FwActivity extends Activity {
 	private static String TAG = "btsfw"; 
+	protected static final String NOTIFICATIONS_FILE = "fw_notify";
 	private static String data_url ="http://stuff.timdouglas.co.uk/bts/fw.php";
 	private FwTimes times;
 	private TextView on_now_text, on_next_text, notes_text;
@@ -83,6 +88,73 @@ public class FwActivity extends Activity {
     @Override
     protected void onResume() {
     	super.onResume();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.options, menu);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) {
+    		case R.id.toggle_notifications:
+    			toggleNotifications((String)item.getTitle());
+    			return true;
+    		default:
+    			return super.onOptionsItemSelected(item);
+    	}
+    }
+    
+    /**
+     * If notification file exists, change menu item
+     * text to the correct toggle name
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+    	File file = getFileStreamPath(NOTIFICATIONS_FILE);
+    	MenuItem item = menu.findItem(R.id.toggle_notifications);
+    	
+    	if(file.exists()) {
+    		item.setTitle(R.string.disable_notifications);
+    	}
+    	else {
+    		item.setTitle(R.string.enable_notifications);
+    	}
+    	
+    	return true;
+    }
+    
+    /**
+     * write or remove a file to indicate
+     * whether the user wants to receive 
+     * notifications or not
+     */
+    protected void toggleNotifications(String title) {
+    	File file = getFileStreamPath(NOTIFICATIONS_FILE);
+    	
+    	//probably shouldn't check the title, but meh...
+    	if(title.equals("Enable Notifications")) {
+    		if(!file.exists()) {
+    			try {
+    				FileOutputStream fos = openFileOutput(NOTIFICATIONS_FILE, Context.MODE_PRIVATE);
+	    			fos.write("show notifications".getBytes()); //doesn't really matter this...
+	    			fos.close();
+    			}
+    			catch(IOException io) {
+    				Log.e(TAG, io.getMessage());
+    			}
+    		}
+    		
+    		
+    	}
+    	else {
+    		if(file.exists()) {
+    			file.delete();
+    		}
+    	}
     }
     
     /**
