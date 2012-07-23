@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -57,9 +60,6 @@ public class FwActivity extends Activity {
         on_next_text = (TextView)findViewById(R.id.onnext_text);
         notes_text = (TextView)findViewById(R.id.notes_text);
         
-        //start service
-        sendBroadcast(new Intent(this, FwScheduleReceiver.class));
-        
         DataTask data = new DataTask();
         data.execute(data_url);
         
@@ -80,9 +80,6 @@ public class FwActivity extends Activity {
     	if(timer != null) {
     		timer.cancel();
     	}
-    	
-    	//TODO remove this:
-    	stopService(new Intent(this, FwService.class));
     }
     
     @Override
@@ -128,6 +125,22 @@ public class FwActivity extends Activity {
     }
     
     /**
+     * static so can be called by services
+     * @param context - application base context
+     * @return true if can, false if not
+     */
+    public static boolean canShowNotifications(Context context) {
+    	File file = context.getFileStreamPath(NOTIFICATIONS_FILE);
+    	
+    	if(file.exists()) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    /**
      * write or remove a file to indicate
      * whether the user wants to receive 
      * notifications or not
@@ -142,19 +155,43 @@ public class FwActivity extends Activity {
     				FileOutputStream fos = openFileOutput(NOTIFICATIONS_FILE, Context.MODE_PRIVATE);
 	    			fos.write("show notifications".getBytes()); //doesn't really matter this...
 	    			fos.close();
+	    			
+	    			//start service
+	    			sendBroadcast(new Intent(this, FwStartServiceReceiver.class));
     			}
     			catch(IOException io) {
     				Log.e(TAG, io.getMessage());
     			}
     		}
-    		
-    		
     	}
     	else {
     		if(file.exists()) {
     			file.delete();
+    			stopService(new Intent(this, FwService.class));
     		}
     	}
+    }
+    
+    protected void scheduleNotification(FwAct act) {
+    	Date on = act.getOnStage();
+    	long notification_time = on.getTime() - (60 * 5 * 1000); //five minutes before act goes on stage
+    	
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTimeInMillis(System.currentTimeMillis());
+    	calendar.add(Calendar.DATE, (int) notification_time);
+    	
+    	AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+    	int id = (int) System.currentTimeMillis();
+    	
+    	Intent intent = new Intent(this, FwStartServiceReceiver.class);
+    	intent.putExtra("ACT", true);
+    	intent.putExtra("ACTName", act.getName());
+    	intent.putExtra("ACTOn", act.getOnStage().getTime());
+    	intent.putExtra("ACTOff", act.getOffStage().getTime());
+    	
+    	PendingIntent pending = PendingIntent.getBroadcast(getApplicationContext(), id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    	
+    	alarm.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
     }
     
     /**
@@ -208,6 +245,9 @@ public class FwActivity extends Activity {
     		//parse response
     		try {
     			JSONObject json = (JSONObject) new JSONTokener(response).nextValue();
+    			
+    			//TODO compare existing times with received json to see if we need an update
+    			//otherwise, don't change this:
     			times = new FwTimes(json);
     			
     			FwAct on_now = times.getNowOnStage(new Date());
@@ -239,6 +279,12 @@ public class FwActivity extends Activity {
     			}
     			catch(IOException io) {
     				Log.e(TAG, io.getMessage());
+    			}
+    			
+    			if(FwActivity.canShowNotifications(getApplicationContext())) {
+    				for(FwAct act : times.getActs()) {
+    					scheduleNotification(act);
+    				}
     			}
     		}
     		catch(JSONException je) {

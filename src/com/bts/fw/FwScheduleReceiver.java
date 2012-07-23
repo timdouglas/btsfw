@@ -14,7 +14,7 @@ import android.content.Intent;
  * 
  * @author tim
  *
- */
+ 
 public class FwScheduleReceiver extends BroadcastReceiver {
 	
 	//Restart service every 5 minutes
@@ -35,3 +35,4 @@ public class FwScheduleReceiver extends BroadcastReceiver {
 	}
 
 }
+*/
