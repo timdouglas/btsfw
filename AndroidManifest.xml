@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="com.bts.fw"
+    android:versionCode="1"
+    android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-sdk android:minSdkVersion="10" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:icon="@drawable/launcher"
+        android:label="@string/app_name" 
+        android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".FwActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name=".FwService" 
+            android:icon="@drawable/launcher" >
+        </service>
+        
+        <receiver android:name="FwScheduleReceiver"></receiver>
+        <receiver android:name="FwStartServiceReceiver"></receiver>
+        
+   	</application>
+
+</manifest>

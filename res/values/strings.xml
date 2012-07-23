@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BTS Freshers Week</string>
+    <string name="title">Freshers\' Week Times</string>
+    <string name="logo_desc">Backstage Technical Services Logo</string>
+    
+    <string name="subtitle1">On Now</string>
+    <string name="subtitle2">On Next</string>
+    <string name="subtitle3">Notes</string>
+    
+    <string name="filler">Event data will appear when available</string>
+    <string name="notes_filler">EM Notes will go here when available</string>
+
+</resources>

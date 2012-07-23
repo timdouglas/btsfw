@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_wrapper"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    >
+    
+   	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	    android:id="@+id/main_top"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" >
+	
+	    <ImageView
+	        android:id="@+id/logo"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/logo_desc"
+	        android:gravity="center"
+	        android:scaleType="center"
+	        android:src="@drawable/bts_temp_lrg" />
+	
+	    <TextView
+	        android:id="@+id/title"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:gravity="center"
+	        android:text="@string/title"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
+	    <TextView
+	        android:id="@+id/hr"
+	        android:layout_width="fill_parent"
+	        android:layout_height="2dip"
+	        android:layout_marginBottom="5dp"
+	        android:layout_marginTop="5dp"
+	        android:background="@color/ae_green" />
+	    
+   	    <DigitalClock
+   	        android:id="@+id/clock"
+   	        android:layout_width="fill_parent"
+   	        android:layout_height="wrap_content"
+   	        android:gravity="center"
+   	        android:textSize="35dp"
+   	        android:textColor="@color/white" />
+
+    </LinearLayout>
+
+	<ScrollView
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/main_scroll_view"
+	    style="@style/main_scroll"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_below="@+id/main_top" >
+   	    
+		<LinearLayout
+		    xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:id="@+id/scroll_inner_wrapper"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    style="@style/inner_wrap" >
+		    
+		    <TextView
+		        android:id="@+id/onnow_title"
+		        android:text="@string/subtitle1"
+		        style="@style/subtitle" />
+		    <TextView
+		        android:id="@+id/onnow_text"
+		        android:text="@string/filler"
+		        style="@style/info_text" />
+		    
+		    <TextView
+		        android:id="@+id/onnext_title"
+		        android:text="@string/subtitle2"
+		        style="@style/subtitle" />
+		    <TextView
+		        android:id="@+id/onnext_text"
+		        android:text="@string/filler"
+		        style="@style/info_text" />
+		    
+		    <TextView
+		        android:id="@+id/notes_title"
+		        android:text="@string/subtitle3"
+		        style="@style/subtitle" />
+		    <TextView
+		        android:id="@+id/notes_text"
+		        android:text="@string/notes_filler"
+		        style="@style/info_text" />
+		    
+		</LinearLayout>
+	    
+	</ScrollView>
+</RelativeLayout>

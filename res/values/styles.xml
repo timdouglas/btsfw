@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    
+    <color name="ae_green">#94d241</color>
+    <color name="bts_yellow">#fbd52a</color>
+    
+    <style name="main_scroll">
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">@color/black</item>
+    </style>
+    
+    <style name="inner_wrap">
+        <item name="android:baselineAligned">true</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+    
+    <style name="subtitle">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/bts_yellow</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+    
+    <style name="info_text">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    
+</resources>
