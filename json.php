@@ -1,1 +1,0 @@
-../Sandbox/bts/index.php
